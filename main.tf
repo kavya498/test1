@@ -1,5 +1,5 @@
 variable "ic_api_key"{}
-# variable "name"{}
+variable "resource_group"{}
 provider "ibm"{
   ibmcloud_api_key=var.ic_api_key
 }
