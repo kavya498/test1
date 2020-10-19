@@ -4,17 +4,38 @@ provider "ibm"{
     region="eu-de"
   ibmcloud_api_key=var.ic_api_key
 }
-resource "random_string" "name" {
-  length  = 8
-  upper   = false
-  lower   = true
-  number  = false
-  special = false
+data "ibm_resource_group" "test_acc"{
+    name ="Default"
 }
 
-resource "ibm_database" "database" {
-  name              = random_string.name.id
+resource "ibm_resource_instance" "cos_instance" {
+  name              = "cos-instance"
+  resource_group_id = data.ibm_resource_group.test_acc.id
+  service           = "cloud-object-storage"
   plan              = "standard"
-  location          = "eu-de"
-  service           = "databases-for-etcd"
+  location          = "global"
+  tags = concat(var.database_tags, list("GIT_VERSION:1.0"))
+    parameters = {
+    "HMAC" = true
+    }
+    timeouts {
+        create = "25m"
+        update = "15m"
+        delete = "15m"
+    }
+}
+
+resource "ibm_database" "rabit" {
+    resource_group_id = data.ibm_resource_group.test_acc.id
+    name              = "rabbit-test"
+    service           = var.database_type
+    plan              = "standard"
+    location          = "eu-de"
+    service_endpoints= var.service_end_points
+    version= var.database_version
+    adminpassword                = var.admin_password
+    members_cpu_allocation_count= var.cpu_size
+    members_memory_allocation_mb = var.ram_size
+    members_disk_allocation_mb   = var.disk_size
+    tags = concat(var.database_tags, list("GIT_VERSION:1.0"))
 }
