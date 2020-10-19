@@ -38,4 +38,9 @@ resource "ibm_database" "rabit" {
     members_memory_allocation_mb = var.ram_size
     members_disk_allocation_mb   = var.disk_size
     tags = concat(var.database_tags, list("GIT_VERSION:1.0"))
+    timeouts {
+        create = "120m"
+        update = "60m"
+        delete = "15m"
+    }
 }
