@@ -34,7 +34,6 @@ resource "ibm_database" "rabit" {
     service_endpoints= var.service_end_points
     version= var.database_version
     adminpassword                = var.admin_password
-#     members_cpu_allocation_count= var.cpu_size
     members_memory_allocation_mb = var.ram_size
     members_disk_allocation_mb   = var.disk_size
     tags = concat(var.database_tags, list("GIT_VERSION:1.0"))
