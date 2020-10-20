@@ -27,7 +27,7 @@ resource "ibm_resource_instance" "cos_instance" {
 
 resource "ibm_database" "rabit" {
     resource_group_id = data.ibm_resource_group.test_acc.id
-    name              = "pg-test-schematics"
+    name              = "pg-test-schematics-1"
     service           = var.database_type
     plan              = "standard"
     location          = "eu-de"
