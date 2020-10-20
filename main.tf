@@ -9,7 +9,7 @@ data "ibm_resource_group" "test_acc"{
 }
 
 resource "ibm_resource_instance" "cos_instance" {
-  name              = "cos-instance"
+  name              = "cos-instance-sch"
   resource_group_id = data.ibm_resource_group.test_acc.id
   service           = "cloud-object-storage"
   plan              = "standard"
@@ -27,7 +27,7 @@ resource "ibm_resource_instance" "cos_instance" {
 
 resource "ibm_database" "rabit" {
     resource_group_id = data.ibm_resource_group.test_acc.id
-    name              = "rabbit-test"
+    name              = "pg-test-schematics"
     service           = var.database_type
     plan              = "standard"
     location          = "eu-de"
