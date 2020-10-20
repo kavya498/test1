@@ -37,7 +37,7 @@ default = "10240"
 }
 variable "admin_password" {
 type = "string"
-default = "Admin@123456"
+default = "Admin123456"
 }
 variable "backup_id" {
 type = "string"
