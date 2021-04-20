@@ -33,3 +33,6 @@ resource "ibm_kms_key" "key" {
     }
   }
 }
+data "ibm_resource_group" "resource_group" {
+  name = "Default"
+}
