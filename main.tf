@@ -7,7 +7,7 @@ data "ibm_resource_group" "resource_group" {
 }
 
 module "kms_instance" {
-  source                 = "../modules/instance"
+  source                 = "./modules/instance"
   resource_group_id      = data.ibm_resource_group.resource_group.id
   service_name           = var.service_name
   location               = var.location
@@ -17,7 +17,7 @@ module "kms_instance" {
 }
 
 module "kms_key" {
-  source                 = "../modules/key"
+  source                 = "./modules/key"
   kms_instance_guid      = module.kms_instance.kms_instance_output.guid
   name                   = var.name
   standard_key_type      = var.standard_key_type
