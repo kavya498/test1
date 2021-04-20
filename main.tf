@@ -15,4 +15,15 @@ module "kms_instance" {
   tags                   = var.tags
   allowed_network_policy = var.allowed_network_policy
 }
+ module "kms_key" {
+  source                 = "./modules/key"
+  kms_instance_guid      = module.kms_instance.kms_instance_output.guid
+  name                   = var.name
+  standard_key_type      = var.standard_key_type
+  force_delete           = var.force_delete
+  network_access_allowed = var.network_access_allowed
+}
 
+output "rg" {
+  value = module.kms_key.data.ibm_resource_group.resource_group
+}
