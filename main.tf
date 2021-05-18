@@ -2,6 +2,9 @@
 # IBM Cloud Key Management Services Provisioning and Managing Keys
 # Copyright 2021 IBM
 #########################################################################################
+provider "ibm"{
+ibmcloud_api_key=var.ibmcloud_api_key
+}
 data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
