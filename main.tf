@@ -6,16 +6,28 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
-module "kms_instance" {
-  source                 = "./modules/instance"
-  resource_group_id      = data.ibm_resource_group.resource_group.id
-  service_name           = var.service_name
-  location               = var.location
-  plan                   = "tiered-pricing"
-  tags                   = var.tags
-  allowed_network_policy = var.allowed_network_policy
+data "ibm_container_cluster_config" "config" {
+  cluster_name_id = "bvc95s7d06u3moinh7dg"
+  resource_group_id = data.ibm_resource_group.resource_group.id
 }
+output "config"{
+  value = data.ibm_container_cluster_config.config
+}
+resource "null_resource" "install_openshift_pipelines_rh_operator" {
+  provisioner "local-exec" {
 
-output "rg" {
-  value = module.kms_key.data.ibm_resource_group.resource_group
+    environment={
+      KUBECONFIG     =  data.ibm_container_cluster_config.config.config_file_path
+      OPERATOR_NAME  = "kiali-ossm"
+      OPERATOR_CHANNEL = "stable"
+    }
+
+    command = <<EOF
+
+    echo $KUBECONFIG
+    cat $KUBECONFIG
+    oc get service
+EOF
+
+  } 
 }
