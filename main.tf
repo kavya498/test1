@@ -1,39 +1,21 @@
-#########################################################################################
-# IBM Cloud Key Management Services Provisioning and Managing Keys
-# Copyright 2021 IBM
-#########################################################################################
-provider "ibm"{
-ibmcloud_api_key=var.ibmcloud_api_key
+provider "google" {
+  project = var.gcp_project
+  region  = var.gcp_region
+  credentials = var.gcp_credentials
 }
-terraform {
-  required_providers {
-    ibm = {
-      source = "IBM-Cloud/ibm"
-      version = "1.25.0"
-    }
-  }
+data "google_compute_zones" "available" {
+  project = var.gcp_project
+  region  = var.gcp_region
 }
-data "ibm_resource_group" "resource_group" {
-  name = "default"
+variable "gcp_project" {
+  description = "GCP Project ID"
+  type        = string
 }
-data "ibm_container_cluster_config" "config" {
-  cluster_name_id = "c27p2ahw01r2v51o295g"
-  resource_group_id = data.ibm_resource_group.resource_group.id
+variable "gcp_region" {
+  description = "Google Region"
+  type        = string
 }
-output "config"{
-  value = data.ibm_container_cluster_config.config
-}
-resource "null_resource" "install_openshift_pipelines_rh_operator" {
-  provisioner "local-exec" {
-    environment={
-      KUBECONFIG     =  data.ibm_container_cluster_config.config.config_file_path
-      OPERATOR_NAME  = "kiali-ossm"
-      OPERATOR_CHANNEL = "stable"
-    }
-    command = <<EOF
-    echo $KUBECONFIG
-    cat $KUBECONFIG
-    oc get service
-EOF
-  }
+variable "gcp_credentials" {
+  description ="Either the path to or the contents of a service account key file in JSON format."
+  type =string
 }
