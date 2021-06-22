@@ -7,6 +7,9 @@ data "google_compute_zones" "available" {
   project = var.gcp_project
   region  = var.gcp_region
 }
+output "zone" {
+  value = data.google_compute_zones.available
+}
 variable "gcp_project" {
   description = "GCP Project ID"
   type        = string
