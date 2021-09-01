@@ -9,6 +9,7 @@ terraform {
 provider "ibm" {
     ibmcloud_api_key = var.ibmcloud_api_key
 }
+variable "ibmcloud_api_key" {}
 data "ibm_container_cluster_config" "cluster_config" {
   cluster_name_id = "c2047t5d0hfu7oe0emm0"
   admin           = true
