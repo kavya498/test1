@@ -7,8 +7,7 @@ terraform {
   }
 }
 data "ibm_container_cluster_config" "cluster_config" {
-  cluster_name_id = var.cluster_k8s
-  resource_group_id = var.cluster_k8s_rg
+  cluster_name_id = "c2047t5d0hfu7oe0emm0"
   admin           = true
 }
 
