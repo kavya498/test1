@@ -2,7 +2,6 @@ terraform {
   required_providers {
     ibm = {
       source = "ibm-cloud/ibm"
-      version = "~> 1.26.0"
     }
   }
 }
@@ -10,25 +9,30 @@ provider "ibm" {
     ibmcloud_api_key = var.ibmcloud_api_key
 }
 variable "ibmcloud_api_key" {}
-data "ibm_container_cluster_config" "cluster_config" {
-  cluster_name_id = "c2047t5d0hfu7oe0emm0"
-  admin           = true
+
+resource "ibm_resource_group" "resource_group" {
+	name ="vpc-cluster"
+}
+resource "ibm_is_vpc" "vpc" {
+	name = "vpc-cluster"
+  resource_group = ibm_resource_group.resource_group.id
+}
+resource "ibm_is_subnet" "subnet" {
+	name                     = "vpc-cluster"
+	vpc                      = ibm_is_vpc.vpc.id
+	zone                     = "us-south-1"
+	total_ipv4_address_count = 256
+  resource_group = ibm_resource_group.resource_group.id
 }
 
-
-provider "kubernetes" {
-  host                   = data.ibm_container_cluster_config.cluster_config.host
-  client_certificate     = data.ibm_container_cluster_config.cluster_config.admin_certificate
-  client_key             = data.ibm_container_cluster_config.cluster_config.admin_key
-  cluster_ca_certificate = data.ibm_container_cluster_config.cluster_config.ca_certificate
-}
-
-
-resource "kubernetes_namespace" "namespacek8s" {
-  metadata {
-    labels = {
-      namespace_name = "test"
-    }
-    name = "test"
+resource "ibm_container_vpc_cluster" "cluster" {
+	name              = "vpc-cluster"
+	vpc_id            = ibm_is_vpc.vpc.id
+	flavor            = "cx2.2x4"
+	worker_count      = 1
+  resource_group_id = ibm_resource_group.resource_group.id
+	zones {
+		 subnet_id = ibm_is_subnet.subnet.id
+		 name      = "us-south-1"
+	}
   }
-}
