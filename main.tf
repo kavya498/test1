@@ -5,24 +5,39 @@ terraform {
     }
   }
 }
+################################
+## provider initialisation ##
+################################
 provider "ibm" {
-    ibmcloud_api_key = var.ibmcloud_api_key
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = var.region
 }
+################################
+## variables
+################################
 variable "ibmcloud_api_key" {}
-
+variable "resource_prefix" {
+  default = "test"
+}
+variable "region" {
+  default = "us-south"
+}
+################################
+## rg, vp, subnet resources
+################################
 resource "ibm_resource_group" "resource_group" {
-	name ="vpc-cluster"
+  name = "${var.resource_prefix}-group"
 }
 resource "ibm_is_vpc" "vpc" {
-	name = "vpc-cluster"
+  name           = "${var.resource_prefix}-vpc"
   resource_group = ibm_resource_group.resource_group.id
 }
 resource "ibm_is_subnet" "subnet" {
-	name                     = "vpc-cluster"
-	vpc                      = ibm_is_vpc.vpc.id
-	zone                     = "us-south-1"
-	total_ipv4_address_count = 256
-  resource_group = ibm_resource_group.resource_group.id
+  name                     = "${var.resource_prefix}-subnet"
+  vpc                      = ibm_is_vpc.vpc.id
+  zone                     = "${var.region}-1"
+  total_ipv4_address_count = 256
+  resource_group           = ibm_resource_group.resource_group.id
 }
 /*
 resource "ibm_container_vpc_cluster" "cluster" {
