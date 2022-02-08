@@ -24,7 +24,7 @@ resource "ibm_is_subnet" "subnet" {
 	total_ipv4_address_count = 256
   resource_group = ibm_resource_group.resource_group.id
 }
-
+/*
 resource "ibm_container_vpc_cluster" "cluster" {
 	name              = "vpc-cluster"
 	vpc_id            = ibm_is_vpc.vpc.id
@@ -36,3 +36,4 @@ resource "ibm_container_vpc_cluster" "cluster" {
 		 name      = "us-south-1"
 	}
   }
+*/
