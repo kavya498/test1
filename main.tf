@@ -12,4 +12,6 @@ resource "ibm_database" "icd_mongo" {
 }
 provider "ibm"{
     region = "eu-de"
+  ibmcloud_api_key = var.key
 }
+variable "key" {}
