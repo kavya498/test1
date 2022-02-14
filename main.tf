@@ -11,7 +11,7 @@ resource "ibm_database" "icd_mongo" {
   members_cpu_allocation_count = 9
 }
 provider "ibm"{
-    region = "eu-de"
+    region = "eu-gb"
   ibmcloud_api_key = var.key
 }
 variable "key" {}
