@@ -1,5 +1,6 @@
 provider "ibm" {
     region = "eu-de"
+	ibmcloud_api_key      = var.ibmcloud_api_key
 }
 terraform {
   required_providers {
@@ -9,7 +10,10 @@ terraform {
     }
   }
 }
-
+variable ibmcloud_api_key {
+  description = "The IBM Cloud platform API key needed to deploy IAM enabled resources"
+  type        = string
+}
 
 resource "ibm_database" elastic {
   name              = "es"
