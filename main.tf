@@ -15,5 +15,5 @@ variable ibmcloud_api_key {
   type        = string
 }
 resource "ibm_is_vpc" "example" {
-  name = "example-vpc"
+  name = "example-vpc-1"
 }
