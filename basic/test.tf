@@ -8,14 +8,14 @@ resource "ibm_is_vpc" "vpc" {
   tags = ["tag1","tag2"]
 }
 
-/*terraform {
+terraform {
   required_version = "~> 1.0.0"
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
     }
   }
-}*/
+}
 
 provider "ibm" {
   region = var.region
