@@ -52,3 +52,10 @@ resource "ibm_database" "icd_mongo2" {
   members_memory_allocation_mb = 3072  # 1GB  per member
   members_disk_allocation_mb   = 61440 # 20GB per member
 }
+resource "null_resource" "sleep" {
+	depends_on =[ibm_database.icd_mongo2]
+
+  provisioner "local-exec" {
+    command = "sleep 60m"
+  }
+}
