@@ -36,6 +36,7 @@ resource "ibm_resource_instance" "instance" {
   service           = "cloud-object-storage"
   plan              = "standard"
   location          = "global"
+  resource_group_id="a06db00ce84e4b8a8ac81ef56748c513"
   tags = [
     "applicationname:k8s-module",
     "environmentid:local",
