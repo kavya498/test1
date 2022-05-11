@@ -32,7 +32,7 @@ variable key {
 }
 
 resource "ibm_resource_instance" "instance" {
-  name              = "test"
+  name              = "test1"
   service           = "cloud-object-storage"
   plan              = "standard"
   location          = "global"
@@ -45,7 +45,7 @@ resource "ibm_resource_instance" "instance" {
 }
 
 resource "ibm_resource_key" "resourceKey" {
-  name                 = "testkey"
+  name                 = "testkey1"
   role                 = "Writer"
   resource_instance_id = ibm_resource_instance.instance.id
   parameters = {
@@ -54,7 +54,7 @@ resource "ibm_resource_key" "resourceKey" {
 }
 
 resource "ibm_resource_key" "resourceKeyadmin" {
-  name                 = "testkey1"
+  name                 = "testkey2"
   role                 = "Manager"
   resource_instance_id = ibm_resource_instance.instance.id
    parameters = {
@@ -66,7 +66,7 @@ resource "ibm_resource_key" "resourceKeyadmin" {
 resource "kubernetes_secret" "config-secret-vol" {
  depends_on = [ibm_resource_instance.instance, ibm_resource_key.resourceKey]
   metadata {
-    name      = "test"
+    name      = "test2"
     namespace = "default"
   }
   immutable = true
