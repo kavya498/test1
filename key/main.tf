@@ -9,10 +9,10 @@ terraform {
   }
 }
 
-data "ibm_container_cluster_config" "cluster_config" {
-  cluster_name_id = "c786rsbf06b9qk9g1dv0"
-  admin           = true
-}
+# data "ibm_container_cluster_config" "cluster_config" {
+#   cluster_name_id = "c786rsbf06b9qk9g1dv0"
+#   admin           = true
+# }
 provider "kubernetes" {
   #load_config_file       = "false"
   #config_path = data.ibm_container_cluster_config.cluster_config.config_file_path
@@ -63,24 +63,24 @@ resource "ibm_resource_key" "resourceKeyadmin" {
 }
 
 # Secret
-resource "kubernetes_secret" "config-secret-vol" {
- depends_on = [ibm_resource_instance.instance, ibm_resource_key.resourceKey]
-  metadata {
-    name      = "test2"
-    namespace = "default"
-  }
-  immutable = true
-  data = {
-     #endpoint = var.cosvol_endpoint
-     #service-instance-id = element(split(":",ibm_resource_instance.namespacek8s_cosvol.id),7)
-     #api-key = "${ ibm_resource_key.resourceKey.credentials["apikey"]}"
-     access-key = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.access_key_id"]
-     secret-key = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.secret_access_key"]
-     res-conf-apikey = ibm_resource_key.resourceKeyadmin.credentials["apikey"]
-     date = timestamp()
-  }
-  type = "ibm/ibmc-s3fs"
-}
+# resource "kubernetes_secret" "config-secret-vol" {
+#  depends_on = [ibm_resource_instance.instance, ibm_resource_key.resourceKey]
+#   metadata {
+#     name      = "test2"
+#     namespace = "default"
+#   }
+#   immutable = true
+#   data = {
+#      #endpoint = var.cosvol_endpoint
+#      #service-instance-id = element(split(":",ibm_resource_instance.namespacek8s_cosvol.id),7)
+#      #api-key = "${ ibm_resource_key.resourceKey.credentials["apikey"]}"
+#      access-key = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.access_key_id"]
+#      secret-key = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.secret_access_key"]
+#      res-conf-apikey = ibm_resource_key.resourceKeyadmin.credentials["apikey"]
+#      date = timestamp()
+#   }
+#   type = "ibm/ibmc-s3fs"
+# }
 
 
 output "access-key" { 
@@ -103,26 +103,26 @@ sensitive = true
   resource_group_id = data.ibm_resource_group.group.id
 }
 
-provider "kubernetes" {
-  load_config_file       = "false"
-  host                   = data.ibm_container_cluster_config.mycluster.host
-  token                  = data.ibm_container_cluster_config.mycluster.token
-  cluster_ca_certificate = data.ibm_container_cluster_config.mycluster.ca_certificate
-}
+# provider "kubernetes" {
+#   load_config_file       = "false"
+#   host                   = data.ibm_container_cluster_config.mycluster.host
+#   token                  = data.ibm_container_cluster_config.mycluster.token
+#   cluster_ca_certificate = data.ibm_container_cluster_config.mycluster.ca_certificate
+# }
 
-resource "kubernetes_secret" "appsecrets" {
-  metadata {
-    name = "my-credentials"
-    namespace = "default"
-  }
+# resource "kubernetes_secret" "appsecrets" {
+#   metadata {
+#     name = "my-credentials"
+#     namespace = "default"
+#   }
 
-  data = {
-    cos_apiKey             = ibm_resource_key.resourceKey.credentials.apikey
-    cos_resourceInstanceId = ibm_resource_key.resourceKey.credentials.resource_instance_id
-    cos_access_key_id      = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.access_key_id"]
-    cos_secret_access_key  = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.secret_access_key"]
-  }
-}
+#   data = {
+#     cos_apiKey             = ibm_resource_key.resourceKey.credentials.apikey
+#     cos_resourceInstanceId = ibm_resource_key.resourceKey.credentials.resource_instance_id
+#     cos_access_key_id      = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.access_key_id"]
+#     cos_secret_access_key  = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.secret_access_key"]
+#   }
+# }
 data "ibm_resource_key" "keydata" {
 depends_on = ["ibm_resource_key.resourceKey"] 
 name = "testkey"
