@@ -9,10 +9,10 @@ terraform {
   }
 }
 
-# data "ibm_container_cluster_config" "cluster_config" {
-#   cluster_name_id = "c786rsbf06b9qk9g1dv0"
-#   admin           = true
-# }
+data "ibm_container_cluster_config" "cluster_config" {
+  cluster_name_id = "c786rsbf06b9qk9g1dv0"
+  admin           = true
+}
 provider "kubernetes" {
   #load_config_file       = "false"
   #config_path = data.ibm_container_cluster_config.cluster_config.config_file_path
@@ -31,7 +31,7 @@ provider ibm {
 variable key {
 }
 
-resource "ibm_resource_instance" "instance" {
+/*resource "ibm_resource_instance" "instance" {
   name              = "test1"
   service           = "cloud-object-storage"
   plan              = "standard"
@@ -61,7 +61,7 @@ resource "ibm_resource_key" "resourceKeyadmin" {
    parameters = {
     "HMAC" = true
   }
-}
+}*/
 
 # Secret
 # resource "kubernetes_secret" "config-secret-vol" {
@@ -84,22 +84,9 @@ resource "ibm_resource_key" "resourceKeyadmin" {
 # }
 
 
-output "access-key" { 
-value = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.access_key_id"]
-sensitive = true
-}
-output "secret-key" { 
-value = ibm_resource_key.resourceKey.credentials["cos_hmac_keys.secret_access_key"]
-sensitive = true
-}
+/*
 
-output "res-conf-apikey" { 
-value = ibm_resource_key.resourceKeyadmin.credentials["apikey"]
-sensitive = true
-}
-
-
-/*data "ibm_container_cluster_config" "mycluster" {
+data "ibm_container_cluster_config" "mycluster" {
   cluster_name_id = "bs7forfd0i9idb52dcs0"
   resource_group_id = data.ibm_resource_group.group.id
 }
