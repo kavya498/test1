@@ -13,7 +13,7 @@ data "ibm_container_cluster_config" "cluster_config" {
   cluster_name_id = var.cluster
   admin           = true
 }
-var cluster {
+variable cluster {
 }
 provider "kubernetes" {
   #load_config_file       = "false"
