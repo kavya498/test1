@@ -10,8 +10,10 @@ terraform {
 }
 
 data "ibm_container_cluster_config" "cluster_config" {
-  cluster_name_id = "c786rsbf06b9qk9g1dv0"
+  cluster_name_id = var.cluster
   admin           = true
+}
+var cluster {
 }
 provider "kubernetes" {
   #load_config_file       = "false"
