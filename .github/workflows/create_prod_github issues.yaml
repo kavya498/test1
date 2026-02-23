@@ -37,8 +37,8 @@ jobs:
               "eu-fr2"
             ];
 
-            const stageIssueNumber = core.getInput('stage_issue_number');
-            const inputRegion = core.getInput('region');
+            const stageIssueNumber = context.payload.inputs.stage_issue_number;
+            const inputRegion = context.payload.inputs.region;
 
             const { data: stageIssue } = await github.rest.issues.get({
               owner: context.repo.owner,
@@ -52,7 +52,7 @@ jobs:
             const regionsToCreate =
               inputRegion && inputRegion.trim() !== ""
                 ? [inputRegion.trim()]
-                : allRegions;
+                : regions;
 
             for (const region of regionsToCreate) {
               await github.rest.issues.create({
