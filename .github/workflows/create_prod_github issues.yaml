@@ -22,19 +22,19 @@ jobs:
         with:
           script: |
            const regions = [
-              "ca-mon",
-              "au-syd",
-              "br-sao",
-              "ca-tor",
-              "jp-osa",
-              "jp-tok",
-              "us-east",
-              "us-south",
-              "in-che",
-              "eu-gb",
-              "eu-es",
-              "eu-de",
-              "eu-fr2"
+              "CA-MON",
+              "AU-SYD",
+              "BR-SAO",
+              "CA-TOR",
+              "JP-OSA",
+              "JP-TOK",
+              "US-EAST",
+              "US-SOUTH",
+              "IN-CHE",
+              "EU-GB",
+              "EU-ES",
+              "EU-DE",
+              "EU-FR2"
             ];
 
             const stageIssueNumber = context.payload.inputs.stage_issue_number;
@@ -47,7 +47,7 @@ jobs:
             });
 
             const baseBody = stageIssue.body || "";
-            const baseTitle = stageIssue.title.replace(/STAGE/i, "PROD");
+            const baseTitle = stageIssue.title.replace(/STAGE/i, "");
 
             const regionsToCreate =
               inputRegion && inputRegion.trim() !== ""
@@ -58,7 +58,7 @@ jobs:
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: `[PROD - ${region}] ${baseTitle}`,
+                title: `${baseTitle} ${region}`,
                 body: `${baseBody}\n\nRegion: ${region}\nCloned from #${stageIssueNumber}`,
                 labels: ["deployment", "prod"]
               });
