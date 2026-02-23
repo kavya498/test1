@@ -7,7 +7,7 @@ on:
         description: "Stage issue number to copy from"
         required: true
       region:
-        description: "Optional: specific region (e.g. us-east-1). Leave empty for all regions."
+        description: "Optional: specific region (e.g. us-east). Leave empty for all regions."
         required: false
 
 jobs:
@@ -60,16 +60,18 @@ jobs:
             for (const region of regionsToCreate) {
               // Replace the value after "Region (required):" with the actual region
               // Replace the value after "Deployment Date (YYYY-MM-DD):" with current date
+              // Uncheck all checked items in the body
               let updatedBody = baseBody
                 .replace(/(Region \(required\):?\s*)([^\n]*)/gi, `$1${region}`)
-                .replace(/(Deployment Date \(YYYY-MM-DD\):?\s*)([^\n]*)/gi, `$1${currentDate}`);
+                .replace(/(Deployment Date \(YYYY-MM-DD\):?\s*)([^\n]*)/gi, `$1${currentDate}`)
+                .replace(/\[x\]/gi, '[ ]');
 
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: `${baseTitle} ${region}`,
                 body: updatedBody,
-                labels: ["deployment", "prod"]
+                labels: ["deployment"]
               });
             }
 
