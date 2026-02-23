@@ -1,0 +1,67 @@
+name: Create Prod Region Issues From Stage
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage_issue_number:
+        description: "Stage issue number to copy from"
+        required: true
+      region:
+        description: "Optional: specific region (e.g. us-east-1). Leave empty for all regions."
+        required: false
+
+jobs:
+  create-prod-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Create prod issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+           const regions = [
+              "ca-mon",
+              "au-syd",
+              "br-sao",
+              "ca-tor",
+              "jp-osa",
+              "jp-tok",
+              "us-east",
+              "us-south",
+              "in-che",
+              "eu-gb",
+              "eu-es",
+              "eu-de",
+              "eu-fr2"
+            ];
+
+            const stageIssueNumber = core.getInput('stage_issue_number');
+            const inputRegion = core.getInput('region');
+
+            const { data: stageIssue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: stageIssueNumber
+            });
+
+            const baseBody = stageIssue.body || "";
+            const baseTitle = stageIssue.title.replace(/STAGE/i, "PROD");
+
+            const regionsToCreate =
+              inputRegion && inputRegion.trim() !== ""
+                ? [inputRegion.trim()]
+                : allRegions;
+
+            for (const region of regionsToCreate) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `[PROD - ${region}] ${baseTitle}`,
+                body: `${baseBody}\n\nRegion: ${region}\nCloned from #${stageIssueNumber}`,
+                labels: ["deployment", "prod"]
+              });
+            }
+
+            console.log(`Created ${regionsToCreate.length} issue(s).`);
