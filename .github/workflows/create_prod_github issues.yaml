@@ -49,17 +49,26 @@ jobs:
             const baseBody = stageIssue.body || "";
             const baseTitle = stageIssue.title.replace(/STAGE/i, "");
 
+            // Get current date in YYYY-MM-DD format
+            const currentDate = new Date().toISOString().split('T')[0];
+
             const regionsToCreate =
               inputRegion && inputRegion.trim() !== ""
                 ? [inputRegion.trim()]
                 : regions;
 
             for (const region of regionsToCreate) {
+              // Replace the value after "Region (required):" with the actual region
+              // Replace the value after "Deployment Date (YYYY-MM-DD):" with current date
+              let updatedBody = baseBody
+                .replace(/(Region \(required\):?\s*)([^\n]*)/gi, `$1${region}`)
+                .replace(/(Deployment Date \(YYYY-MM-DD\):?\s*)([^\n]*)/gi, `$1${currentDate}`);
+
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 title: `${baseTitle} ${region}`,
-                body: `${baseBody}\n\nRegion: ${region}\nCloned from #${stageIssueNumber}`,
+                body: updatedBody,
                 labels: ["deployment", "prod"]
               });
             }
