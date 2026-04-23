@@ -1,4 +1,4 @@
-data "ibm_logs_alert_definitions" "logs_alert_definitions" {
+data "ibm_logs_alerts" "logs_alert_definitions" {
   instance_id = "dd3a5761-a991-4778-aa6c-14658035d24d"
   region      = "eu-fr2"
   endpoint_type = "private"
